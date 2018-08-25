@@ -1,5 +1,4 @@
 # Repository of Software Architecture Artefacts
-***
 
 This repository groups artefacts used on software architecture module. This module is delivered to undergraduate students of computer science-related courses at Universidade Tecnológica Federal do Paraná, Cornélio Procópio, Brazil.  
 
