@@ -1,4 +1,4 @@
-package edu.utfpr.cp.sa.entidade;
+package edu.utfpr.cp.sa.entity;
 
 public class Country {
 	

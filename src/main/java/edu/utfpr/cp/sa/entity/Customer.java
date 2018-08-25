@@ -1,4 +1,4 @@
-package edu.utfpr.cp.sa.entidade;
+package edu.utfpr.cp.sa.entity;
 
 public class Customer {
 	
@@ -13,7 +13,10 @@ public class Customer {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(String name) throws Exception {
+		if (name.length() < 5)
+			throw new Exception("Sorry, name must be 5 characters in length!");
+		
 		this.name = name;
 	}
 
