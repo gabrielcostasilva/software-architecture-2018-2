@@ -23,3 +23,8 @@ cd software-architecture-2018-2
 mvn package
 java -jar target/app2-1.0-SNAPSHOT.jar
 ```
+
+### App03
+This branch just adds the class architectural description to App02 maven project. The architectural description was created by using IntelliJ IDEA automatic diagram generator. 
+
+To see the description, just go to src/main/resources
