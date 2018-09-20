@@ -1,30 +1,16 @@
 package edu.utfpr.cp.sa.entity;
 
+import lombok.Data;
+
+@Data
 public class Country {
 	
+        private Long id;
 	private String name;
 	private String acronym;
 	private int phoneDigits;
 	
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getAcronym() {
-		return acronym;
-	}
-	public void setAcronym(String acronym) {
-		this.acronym = acronym;
-	}
-	public int getPhoneDigits() {
-		return phoneDigits;
-	}
-	public void setPhoneDigits(int phoneDigits) {
-		this.phoneDigits = phoneDigits;
-	}
-	@Override
+        @Override
 	public int hashCode() {
 		return this.getName().hashCode();
 	}

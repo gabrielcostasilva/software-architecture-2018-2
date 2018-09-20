@@ -1,7 +1,11 @@
 package edu.utfpr.cp.sa.entity;
 
+import lombok.Data;
+
+@Data
 public class Customer {
 	
+        private Long id;
 	private String name;
 	private String phone;
 	private int age;
@@ -9,19 +13,11 @@ public class Customer {
 	
 	private Country country;
 
-	public String getName() {
-		return name;
-	}
-
 	public void setName(String name) throws Exception {
 		if (name.length() < 5)
 			throw new Exception("Sorry, name must be 5 characters in length!");
 		
 		this.name = name;
-	}
-
-	public String getPhone() {
-		return phone;
 	}
 
 	public void setPhone(String phone) throws Exception {
@@ -33,10 +29,6 @@ public class Customer {
 			throw new Exception("Phone does not conform to country!");
 		
 		this.phone = phone;
-	}
-
-	public int getAge() {
-		return age;
 	}
 
 	public void setAge(int age) {
@@ -51,18 +43,6 @@ public class Customer {
 			this.setCreditLimit(this.getCreditLimit() + 500.0);
 			
 		this.age = age;
-	}
-
-	public double getCreditLimit() {
-		return creditLimit;
-	}
-
-	public void setCreditLimit(double creditLimit) {
-		this.creditLimit = creditLimit;
-	}
-
-	public Country getCountry() {
-		return country;
 	}
 
 	public void setCountry(Country country) throws Exception {
@@ -87,7 +67,5 @@ public class Customer {
 		
 		return this.getName().equalsIgnoreCase(other.getName());
 	}
-	
-	
 
 }
