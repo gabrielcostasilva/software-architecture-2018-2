@@ -1,4 +1,4 @@
-package edu.utfpr.cp.sa.entity;
+ package edu.utfpr.cp.sa.entity;
 
 import lombok.Data;
 
@@ -12,6 +12,17 @@ public class Customer {
 	private double creditLimit;
 	
 	private Country country;
+        
+        public Customer () {}
+        
+        public Customer (Long id, String name, String phone, int age, double creditLimit, Country country) {
+            this.id = id;
+            this.name = name;
+            this.age = age;
+            this.phone = phone;
+            this.creditLimit = creditLimit;
+            this.country = country;
+        }
 
 	public void setName(String name) throws Exception {
 		if (name.length() < 5)
