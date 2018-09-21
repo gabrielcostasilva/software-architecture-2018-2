@@ -11,6 +11,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class CountryDAO {
+    
+    private final String URL = "";
+    private final String USER = "";
+    private final String PASSWD = "";
 
     public boolean create(Country country) {
 
@@ -19,7 +23,7 @@ public class CountryDAO {
         
         else {
 
-            try (Connection conn = DriverManager.getConnection("", "", "")) {
+            try (Connection conn = DriverManager.getConnection(URL, USER, PASSWD)) {
 
                 PreparedStatement statement = conn.prepareStatement("INSERT INTO Country (name, acronym, phoneDigits) VALUES (?, ?, ?)");
                 statement.setString(1, country.getName());
@@ -41,7 +45,7 @@ public class CountryDAO {
     public Set<Country> read() {
         HashSet<Country> countries = new HashSet<>();
 
-        try (Connection conn = DriverManager.getConnection("", "", "")) {
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWD)) {
 
             Statement statement = conn.createStatement();
             ResultSet result = statement.executeQuery("SELECT * FROM Country");
@@ -76,7 +80,7 @@ public class CountryDAO {
             throw new IllegalArgumentException("There already is a country with this name!");
         
         else {
-            try (Connection conn = DriverManager.getConnection("", "", "")) {
+            try (Connection conn = DriverManager.getConnection(URL, USER, PASSWD)) {
 
                 PreparedStatement statement = conn.prepareStatement("UPDATE Country SET name=?, acronym=?, phoneDigits=? WHERE id=?");
                 statement.setString(1, country.getName());
@@ -102,7 +106,7 @@ public class CountryDAO {
             throw new IllegalArgumentException("Country has not been found!");
 
         } else {
-            try (Connection conn = DriverManager.getConnection("", "", "")) {
+            try (Connection conn = DriverManager.getConnection(URL, USER, PASSWD)) {
 
                 PreparedStatement statement = conn.prepareStatement("DELETE FROM Country WHERE id=?");
                 statement.setLong(1, id);
