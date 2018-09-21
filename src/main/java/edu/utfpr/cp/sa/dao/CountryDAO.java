@@ -13,19 +13,26 @@ import java.util.Set;
 public class CountryDAO {
 
     public boolean create(Country country) {
-        try (Connection conn = DriverManager.getConnection("", "", "")) {
 
-            PreparedStatement statement = conn.prepareStatement("INSERT INTO Country (name, acronym, phoneDigits) VALUES (?, ?, ?)");
-            statement.setString(1, country.getName());
-            statement.setString(2, country.getAcronym());
-            statement.setInt(3, country.getPhoneDigits());
+        if (this.read().stream().map(Country::getName).anyMatch(e -> e.equals(country.getName()))) 
+            throw new IllegalArgumentException("There already is a country with this name!");
+        
+        else {
 
-            if (statement.executeUpdate() > 0) {
-                return true;
+            try (Connection conn = DriverManager.getConnection("", "", "")) {
+
+                PreparedStatement statement = conn.prepareStatement("INSERT INTO Country (name, acronym, phoneDigits) VALUES (?, ?, ?)");
+                statement.setString(1, country.getName());
+                statement.setString(2, country.getAcronym());
+                statement.setInt(3, country.getPhoneDigits());
+
+                if (statement.executeUpdate() > 0) {
+                    return true;
+                }
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
         }
 
         return false;
@@ -62,9 +69,13 @@ public class CountryDAO {
 
     public boolean update(Country country) {
 
-        if (this.read().stream().map(Country::getId).anyMatch(e -> e != country.getId())) {
+        if (this.read().stream().map(Country::getId).anyMatch(e -> e != country.getId())) 
             throw new IllegalArgumentException("Current country has not been found!");
-        } else {
+            
+        else if (this.read().stream().map(Country::getName).anyMatch(e -> e.equals(country.getName())))
+            throw new IllegalArgumentException("There already is a country with this name!");
+        
+        else {
             try (Connection conn = DriverManager.getConnection("", "", "")) {
 
                 PreparedStatement statement = conn.prepareStatement("UPDATE Country SET name=?, acronym=?, phoneDigits=? WHERE id=?");
@@ -92,19 +103,20 @@ public class CountryDAO {
 
         } else {
             try (Connection conn = DriverManager.getConnection("", "", "")) {
-                
+
                 PreparedStatement statement = conn.prepareStatement("DELETE FROM Country WHERE id=?");
                 statement.setLong(1, id);
 
-                if (statement.executeUpdate() > 0) 
+                if (statement.executeUpdate() > 0) {
                     return true;
+                }
 
             } catch (SQLException ex) {
                 ex.printStackTrace();
 
             }
         }
-        
+
         return false;
     }
 
