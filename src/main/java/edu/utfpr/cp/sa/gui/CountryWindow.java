@@ -1,5 +1,6 @@
 package edu.utfpr.cp.sa.gui;
 
+import edu.utfpr.cp.sa.dao.CountryDAO;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -75,7 +76,7 @@ public class CountryWindow extends JFrame {
 	private JTextField acronym;
 	private JTextField phoneDigits;
 	private JTable table;
-	private Set<Country> countries;
+	private CountryDAO countryDAO;
 	
 	private void create () {
 		Country c = new Country();
@@ -83,17 +84,17 @@ public class CountryWindow extends JFrame {
 		c.setAcronym(acronym.getText());
 		c.setPhoneDigits(new Integer(phoneDigits.getText()));
 				
-		if (this.countries.add(c)) {
+		if (this.countryDAO.create(c)) {
 			JOptionPane.showMessageDialog(this, "Country successfully added!");
-			this.table.setModel(new CountryTableModel(countries));
+			this.table.setModel(new CountryTableModel(countryDAO.read()));
 		
 		} else
-			JOptionPane.showMessageDialog(this, "Sorry, country already exists");
+			JOptionPane.showMessageDialog(this, "Sorry, something went wrong!");
 		
 	}
 	
-	public CountryWindow(Set<Country> countries) {
-		this.countries = countries;
+	public CountryWindow(CountryDAO countryDAO) {
+		this.countryDAO = countryDAO;
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		contentPane = new JPanel();
@@ -105,7 +106,7 @@ public class CountryWindow extends JFrame {
 		contentPane.add(panelTable, BorderLayout.CENTER);
 		
 		table = new JTable();
-		table.setModel(new CountryTableModel(countries));
+		table.setModel(new CountryTableModel(countryDAO.read()));
 		panelTable.setViewportView(table);
 		
 		JPanel panelInclusion = new JPanel();

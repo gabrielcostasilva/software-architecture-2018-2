@@ -1,5 +1,7 @@
 package edu.utfpr.cp.sa.gui;
 
+import edu.utfpr.cp.sa.dao.CountryDAO;
+import edu.utfpr.cp.sa.dao.CustomerDAO;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -87,19 +89,12 @@ public class CustomerWindow extends JFrame {
 	private JComboBox<String> country;
 	private JTable table;
 	
-	private Set<Customer> customers;
-	private Set<Country> countries;
+	private CustomerDAO customerDAO;
+	private CountryDAO countryDAO;
 	
 	private void create () {
 		Customer c = new Customer();
-		Country selected = countries
-								.stream()
-								.filter(
-										e -> e.getName()
-												.equalsIgnoreCase(
-														(String) country.getSelectedItem()))
-								.findFirst()
-								.get();
+		Country selected = countryDAO.read().stream().filter(e -> e.getName().equalsIgnoreCase((String) country.getSelectedItem())).findFirst().get();
 		
 		try {
 			c.setCountry(selected);
@@ -130,9 +125,9 @@ public class CustomerWindow extends JFrame {
 			
 		}
 						
-		if (this.customers.add(c)) {
+		if (this.customerDAO.create(c)) {
 			JOptionPane.showMessageDialog(this, "Customer successfully added!");
-			this.table.setModel(new CustomerTableModel(customers));
+			this.table.setModel(new CustomerTableModel(customerDAO.read()));
 			this.pack();
 		
 		} else
@@ -140,9 +135,9 @@ public class CustomerWindow extends JFrame {
 		
 	}
 	
-	public CustomerWindow(Set<Customer> customers, Set<Country> countries) {
-		this.customers = customers;
-		this.countries = countries;
+	public CustomerWindow(CustomerDAO customerDAO, CountryDAO countryDAO) {
+		this.customerDAO = customerDAO;
+		this.countryDAO = countryDAO;
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		contentPane = new JPanel();
@@ -154,7 +149,7 @@ public class CustomerWindow extends JFrame {
 		contentPane.add(panelTable, BorderLayout.CENTER);
 		
 		table = new JTable();
-		table.setModel(new CustomerTableModel(customers));
+		table.setModel(new CustomerTableModel(customerDAO.read()));
 		panelTable.setViewportView(table);
 		
 		JPanel panelInclusion = new JPanel();
@@ -185,7 +180,7 @@ public class CustomerWindow extends JFrame {
 		JLabel lblCountry = new JLabel("Country");
 		panelInclusion.add(lblCountry);
 		
-		country = new JComboBox<>(countries.stream().map(Country::getName).toArray(String[]::new));
+		country = new JComboBox<>(countryDAO.read().stream().map(Country::getName).toArray(String[]::new));
 		panelInclusion.add(country);
 		
 		JButton btnCreate = new JButton("Create");

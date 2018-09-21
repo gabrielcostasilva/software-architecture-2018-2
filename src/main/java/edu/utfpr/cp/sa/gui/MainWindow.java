@@ -1,5 +1,7 @@
 package edu.utfpr.cp.sa.gui;
 
+import edu.utfpr.cp.sa.dao.CountryDAO;
+import edu.utfpr.cp.sa.dao.CustomerDAO;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -21,12 +23,9 @@ import java.awt.event.ActionEvent;
 public class MainWindow extends JFrame {
 
 	private JPanel contentPane;
-	private Set<Customer> customers;
-	private Set<Country> countries;
+	private CountryDAO countryDAO;
+        private CustomerDAO customerDAO;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -44,8 +43,8 @@ public class MainWindow extends JFrame {
 	 * Create the frame.
 	 */
 	public MainWindow() {
-		this.countries = new HashSet<>();
-		this.customers = new HashSet<>();
+		this.countryDAO = new CountryDAO();
+		this.customerDAO = new CustomerDAO();
 		
 		setTitle("Customer & Country Management");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -56,10 +55,10 @@ public class MainWindow extends JFrame {
 		
 		JButton btnCustomerManagement = new JButton("Customer Management");
 		contentPane.add(btnCustomerManagement);
-		btnCustomerManagement.addActionListener(e -> new CustomerWindow(customers, countries));
+		btnCustomerManagement.addActionListener(e -> new CustomerWindow(customerDAO, countryDAO));
 		
 		JButton btnCountryManagement = new JButton("Country Management");
-		btnCountryManagement.addActionListener(e -> new CountryWindow(countries));
+		btnCountryManagement.addActionListener(e -> new CountryWindow(countryDAO));
 		contentPane.add(btnCountryManagement);
 		
 		pack();
