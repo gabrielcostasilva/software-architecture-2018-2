@@ -28,3 +28,16 @@ java -jar target/app2-1.0-SNAPSHOT.jar
 This branch just adds the class architectural description to App02 maven project. The architectural description was created by using IntelliJ IDEA automatic diagram generator. 
 
 To see the description, just go to src/main/resources
+
+### App04
+This branch adds the DAO pattern and JDBC to enable database access. In addition, layer, data and class architectural descriptions can be found in src/main/resources.
+
+This is a maven project with Derby embedded DB. Thus you just need to clone, package and run, like this:
+
+```
+git clone -b App04 https://github.com/gabrielcostasilva/software-architecture-2018-2.git
+
+cd software-architecture-2018-2
+mvn package
+java -jar target/app2-1.0-SNAPSHOT.jar
+```
