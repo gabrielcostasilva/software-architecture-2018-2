@@ -14,7 +14,7 @@ public class CountryDAO {
 
     private final String URL = "jdbc:derby:database";
 
-public boolean create(Country country) throws Exception {
+    public boolean create(Country country) throws Exception {
 
         if (this.read().stream().map(Country::getName).anyMatch(e -> e.equals(country.getName()))) {
             throw new IllegalArgumentException("There already is a country with this name!");
@@ -70,12 +70,12 @@ public boolean create(Country country) throws Exception {
     }
 
     public boolean update(Country country) {
-
-        if (this.read().stream().map(Country::getId).anyMatch(e -> e != country.getId())) {
-            throw new IllegalArgumentException("Current country has not been found!");
-        } else if (this.read().stream().map(Country::getName).anyMatch(e -> e.equals(country.getName()))) {
+        
+        if (this.read().stream().map(Country::getName).anyMatch(e -> e.equals(country.getName()))) {
             throw new IllegalArgumentException("There already is a country with this name!");
+
         } else {
+            
             try (Connection conn = DriverManager.getConnection(URL)) {
 
                 PreparedStatement statement = conn.prepareStatement("UPDATE Country SET name=?, acronym=?, phoneDigits=? WHERE id=?");
@@ -83,7 +83,7 @@ public boolean create(Country country) throws Exception {
                 statement.setString(2, country.getAcronym());
                 statement.setInt(3, country.getPhoneDigits());
                 statement.setLong(4, country.getId());
-
+                
                 if (statement.executeUpdate() > 0) {
                     return true;
                 }
@@ -98,25 +98,21 @@ public boolean create(Country country) throws Exception {
     }
 
     public boolean delete(Long id) {
-        if (this.read().stream().map(Country::getId).anyMatch(e -> e != id)) {
-            throw new IllegalArgumentException("Country has not been found!");
 
-        } else {
-            try (Connection conn = DriverManager.getConnection(URL)) {
+        try (Connection conn = DriverManager.getConnection(URL)) {
 
-                PreparedStatement statement = conn.prepareStatement("DELETE FROM Country WHERE id=?");
-                statement.setLong(1, id);
+            PreparedStatement statement = conn.prepareStatement("DELETE FROM Country WHERE id=?");
+            statement.setLong(1, id);
 
-                if (statement.executeUpdate() > 0) {
-                    return true;
-                }
-
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-
+            if (statement.executeUpdate() > 0) {
+                return true;
             }
-        }
 
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+
+        }
+        
         return false;
     }
 

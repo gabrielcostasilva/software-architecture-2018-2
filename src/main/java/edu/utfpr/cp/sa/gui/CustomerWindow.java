@@ -31,7 +31,7 @@ import javax.swing.JTable;
 class CustomerTableModel extends AbstractTableModel {
 
     private ArrayList<Customer> customers;
-    private String columnNames[] = {"Name", "Phone", "Credit Limit", "Age", "Country"};
+    private String columnNames[] = {"ID", "Name", "Phone", "Credit Limit", "Age", "Country"};
 
     public CustomerTableModel(Set<Customer> customers) {
         this.customers = new ArrayList<>(customers);
@@ -57,18 +57,21 @@ class CustomerTableModel extends AbstractTableModel {
 
         switch (columnIndex) {
             case 0:
+                return this.customers.get(rowIndex).getId();
+            
+            case 1:
                 return this.customers.get(rowIndex).getName();
 
-            case 1:
+            case 2:
                 return this.customers.get(rowIndex).getPhone();
 
-            case 2:
+            case 3:
                 return this.customers.get(rowIndex).getCreditLimit();
 
-            case 3:
+            case 4:
                 return this.customers.get(rowIndex).getAge();
 
-            case 4:
+            case 5:
                 return this.customers.get(rowIndex).getCountry().getName();
 
             default:
