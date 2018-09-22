@@ -13,17 +13,15 @@ import java.util.Set;
 
 public class CustomerDAO {
     
-    private final String URL = "";
-    private final String USER = "";
-    private final String PASSWD = "";
+    private final String URL = "jdbc:derby:database";
 
-    public boolean create(Customer customer) {
+    public boolean create(Customer customer) throws Exception {
 
         if (this.read().stream().map(Customer::getName).anyMatch(e -> e.equals(customer.getName())))
             throw new IllegalArgumentException("There already is a customer with this name!");
             
         else {
-            try (Connection conn = DriverManager.getConnection(URL, USER, PASSWD)) {
+            try (Connection conn = DriverManager.getConnection(URL)) {
 
                 PreparedStatement statement = conn.prepareStatement("INSERT INTO Customer (name, phone, age, creditLimit, countryId) VALUES (?, ?, ?, ?, ?)");
                 statement.setString(1, customer.getName());
@@ -48,7 +46,7 @@ public class CustomerDAO {
     public Set<Customer> read() {
         HashSet<Customer> customers = new HashSet<>();
 
-        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWD)) {
+        try (Connection conn = DriverManager.getConnection(URL)) {
 
             Statement statement = conn.createStatement();
             ResultSet result = statement.executeQuery("SELECT * FROM Customer");
@@ -89,7 +87,7 @@ public class CustomerDAO {
             throw new IllegalArgumentException("There already is a customer with this name!");
     
         else {
-            try (Connection conn = DriverManager.getConnection(URL, USER, PASSWD)) {
+            try (Connection conn = DriverManager.getConnection(URL)) {
 
                 PreparedStatement statement = conn.prepareStatement("UPDATE Customer SET name = ?, phone = ?, age = ?, creditLimit = ? , countryId = ? WHERE id = ?");
                 statement.setString(1, customer.getName());
@@ -117,7 +115,7 @@ public class CustomerDAO {
             throw new IllegalArgumentException("Customer has not been found!");
 
         } else {
-            try (Connection conn = DriverManager.getConnection(URL, USER, PASSWD)) {
+            try (Connection conn = DriverManager.getConnection(URL)) {
 
                 PreparedStatement statement = conn.prepareStatement("DELETE FROM Customer WHERE id=?");
                 statement.setLong(1, id);

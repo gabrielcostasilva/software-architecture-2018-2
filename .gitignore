@@ -4,3 +4,7 @@
 /target/
 .vscode/
 /nbproject/
+.idea/
+database/
+.factorypath
+derby.log
