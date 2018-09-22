@@ -3,7 +3,6 @@ package edu.utfpr.cp.sa.gui;
 import edu.utfpr.cp.sa.dao.CountryDAO;
 import edu.utfpr.cp.sa.dao.CustomerDAO;
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -16,10 +15,7 @@ import edu.utfpr.cp.sa.entity.Customer;
 
 import java.awt.GridLayout;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -207,8 +203,11 @@ public class CustomerWindow extends JFrame {
 
         try {
             customerDAO.delete(new Long(id.getText()));
+            
             JOptionPane.showMessageDialog(this, "Customer successfully deleted!");
+            
             this.cleanPanelData();
+            
             this.table.setModel(new CountryTableModel(countryDAO.read()));
 
         } catch (Exception e) {
