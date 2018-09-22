@@ -22,7 +22,7 @@ public class MainWindow extends JFrame {
     private CustomerDAO customerDAO;
 
     public static void main(String[] args) {
-        // Create tables
+        // Create tables in the database
         try (Connection conn = DriverManager.getConnection("jdbc:derby:database;create=true")) {
             conn.createStatement().executeUpdate(
                     "CREATE TABLE COUNTRY "
