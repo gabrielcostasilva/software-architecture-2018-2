@@ -58,7 +58,7 @@ class CustomerTableModel extends AbstractTableModel {
         switch (columnIndex) {
             case 0:
                 return this.customers.get(rowIndex).getId();
-            
+
             case 1:
                 return this.customers.get(rowIndex).getName();
 
@@ -86,6 +86,7 @@ class CustomerTableModel extends AbstractTableModel {
 public class CustomerWindow extends JFrame {
 
     private JPanel contentPane;
+    private JTextField id;
     private JTextField name;
     private JTextField phone;
     private JTextField age;
@@ -94,6 +95,23 @@ public class CustomerWindow extends JFrame {
 
     private CustomerDAO customerDAO;
     private CountryDAO countryDAO;
+
+    private void cleanPanelData() {
+        id.setText("");
+        name.setText("");
+        phone.setText("");
+        age.setText("");
+    }
+
+    private void updatePanelData() {
+        this.cleanPanelData();
+
+        id.setText(String.valueOf(this.table.getModel().getValueAt(this.table.getSelectedRow(), 0)));
+        name.setText(String.valueOf(this.table.getModel().getValueAt(this.table.getSelectedRow(), 1)));
+        phone.setText(String.valueOf(this.table.getModel().getValueAt(this.table.getSelectedRow(), 2)));
+        age.setText(String.valueOf(this.table.getModel().getValueAt(this.table.getSelectedRow(), 4)));
+        country.setSelectedItem(String.valueOf(this.table.getModel().getValueAt(this.table.getSelectedRow(), 5)));
+    }
 
     private void create() {
         Customer c = new Customer();
@@ -131,12 +149,71 @@ public class CustomerWindow extends JFrame {
         try {
             customerDAO.create(c);
             JOptionPane.showMessageDialog(this, "Customer successfully added!");
+            this.cleanPanelData();
             this.table.setModel(new CustomerTableModel(customerDAO.read()));
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
 
+    }
+
+    private void update() {
+        Customer c = customerDAO.read().stream().filter(e -> e.getId().equals(new Long(id.getText()))).findAny().get();
+        Country selected = countryDAO.read().stream().filter(e -> e.getName().equalsIgnoreCase((String) country.getSelectedItem())).findFirst().get();
+
+        try {
+            c.setCountry(selected);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+            return;
+
+        }
+
+        c.setAge(new Integer(age.getText()));
+
+        try {
+            c.setName(name.getText());
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+            return;
+
+        }
+
+        try {
+            c.setPhone(phone.getText());
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+            return;
+
+        }
+
+        try {
+            customerDAO.update(c);
+            JOptionPane.showMessageDialog(this, "Customer successfully updated!");
+            this.cleanPanelData();
+            this.table.setModel(new CustomerTableModel(customerDAO.read()));
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+
+    }
+
+    private void delete() {
+
+        try {
+            customerDAO.delete(new Long(id.getText()));
+            JOptionPane.showMessageDialog(this, "Customer successfully deleted!");
+            this.cleanPanelData();
+            this.table.setModel(new CountryTableModel(countryDAO.read()));
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
     }
 
     public CustomerWindow(CustomerDAO customerDAO, CountryDAO countryDAO) {
@@ -155,10 +232,19 @@ public class CustomerWindow extends JFrame {
         table = new JTable();
         table.setModel(new CustomerTableModel(customerDAO.read()));
         panelTable.setViewportView(table);
+        table.getSelectionModel().addListSelectionListener(e -> this.updatePanelData());
 
         JPanel panelInclusion = new JPanel();
         contentPane.add(panelInclusion, BorderLayout.NORTH);
-        panelInclusion.setLayout(new GridLayout(5, 2, 0, 0));
+        panelInclusion.setLayout(new GridLayout(7, 2, 0, 0));
+
+        JLabel lblId = new JLabel("Id");
+        panelInclusion.add(lblId);
+
+        id = new JTextField();
+        id.setColumns(4);
+        id.setEnabled(false);
+        panelInclusion.add(id);
 
         JLabel lblName = new JLabel("Name");
         panelInclusion.add(lblName);
@@ -190,6 +276,14 @@ public class CustomerWindow extends JFrame {
         JButton btnCreate = new JButton("Create");
         panelInclusion.add(btnCreate);
         btnCreate.addActionListener(e -> this.create());
+
+        JButton btnUpdate = new JButton("Update");
+        panelInclusion.add(btnUpdate);
+        btnUpdate.addActionListener(e -> this.update());
+
+        JButton btnDelete = new JButton("Delete");
+        panelInclusion.add(btnDelete);
+        btnDelete.addActionListener(e -> this.delete());
 
         JButton btnClose = new JButton("Close");
         panelInclusion.add(btnClose);

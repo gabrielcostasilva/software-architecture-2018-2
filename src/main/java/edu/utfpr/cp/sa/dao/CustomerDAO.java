@@ -12,15 +12,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class CustomerDAO {
-    
+
     private final String URL = "jdbc:derby:database";
 
     public boolean create(Customer customer) throws Exception {
 
-        if (this.read().stream().map(Customer::getName).anyMatch(e -> e.equals(customer.getName())))
+        if (this.read().stream().map(Customer::getName).anyMatch(e -> e.equals(customer.getName()))) {
             throw new IllegalArgumentException("There already is a customer with this name!");
-            
-        else {
+        } else {
             try (Connection conn = DriverManager.getConnection(URL)) {
 
                 PreparedStatement statement = conn.prepareStatement("INSERT INTO Customer (name, phone, age, creditLimit, countryId) VALUES (?, ?, ?, ?, ?)");
@@ -80,13 +79,9 @@ public class CustomerDAO {
 
     public boolean update(Customer customer) {
 
-        if (this.read().stream().map(Customer::getId).anyMatch(e -> e != customer.getId())) 
-            throw new IllegalArgumentException("Current customer has not been found!");
-            
-        else if (this.read().stream().map(Customer::getName).anyMatch(e -> e.equals(customer.getName())))
+        if (this.read().stream().map(Customer::getName).anyMatch(e -> e.equals(customer.getName()))) {
             throw new IllegalArgumentException("There already is a customer with this name!");
-    
-        else {
+        } else {
             try (Connection conn = DriverManager.getConnection(URL)) {
 
                 PreparedStatement statement = conn.prepareStatement("UPDATE Customer SET name = ?, phone = ?, age = ?, creditLimit = ? , countryId = ? WHERE id = ?");
@@ -111,23 +106,18 @@ public class CustomerDAO {
     }
 
     public boolean delete(Long id) {
-        if (this.read().stream().map(Customer::getId).anyMatch(e -> e != id)) {
-            throw new IllegalArgumentException("Customer has not been found!");
+        try (Connection conn = DriverManager.getConnection(URL)) {
 
-        } else {
-            try (Connection conn = DriverManager.getConnection(URL)) {
+            PreparedStatement statement = conn.prepareStatement("DELETE FROM Customer WHERE id=?");
+            statement.setLong(1, id);
 
-                PreparedStatement statement = conn.prepareStatement("DELETE FROM Customer WHERE id=?");
-                statement.setLong(1, id);
-
-                if (statement.executeUpdate() > 0) {
-                    return true;
-                }
-
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-
+            if (statement.executeUpdate() > 0) {
+                return true;
             }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+
         }
 
         return false;
