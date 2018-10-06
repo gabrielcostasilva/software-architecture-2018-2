@@ -1,3 +1,9 @@
+César Cardoso RA 1749293
+
+Leandro Fernandes RA 1771310
+
+Tamires Cassiano RA 1771337
+
 # Repository of Software Architecture Artefacts
 
 This repository groups artefacts used on software architecture module. This module is delivered to undergraduate students of computer science-related courses at Universidade Tecnológica Federal do Paraná, Cornélio Procópio, Brazil.  
