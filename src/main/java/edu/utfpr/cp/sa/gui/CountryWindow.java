@@ -1,5 +1,6 @@
 package edu.utfpr.cp.sa.gui;
 
+import edu.utfpr.cp.sa.business.CountryBusiness;
 import edu.utfpr.cp.sa.dao.CountryDAO;
 import java.awt.BorderLayout;
 
@@ -79,7 +80,7 @@ public class CountryWindow extends JFrame {
     private JTextField phoneDigits;
     private JTable table;
     private CountryDAO countryDAO;
-    
+    private CountryBusiness countryBusiness;
     
     private void cleanPanelData() {
         id.setText("");
@@ -104,7 +105,8 @@ public class CountryWindow extends JFrame {
         c.setPhoneDigits(new Integer(phoneDigits.getText()));
 
         try {
-            countryDAO.create(c);
+            countryBusiness.create(c);
+            //countryDAO.create(c);
             JOptionPane.showMessageDialog(this, "Country successfully added!");
             this.table.setModel(new CountryTableModel(countryDAO.read()));
             
@@ -119,16 +121,16 @@ public class CountryWindow extends JFrame {
         
         try {
             
-            Country c = countryDAO.read().stream().filter(e -> e.getId().equals(new Long(id.getText()))).findAny().get();
+            Country c = countryBusiness.read().stream().filter(e -> e.getId().equals(new Long(id.getText()))).findAny().get();
             
             c.setName(name.getText());
             c.setAcronym(acronym.getText());
             c.setPhoneDigits(new Integer(phoneDigits.getText()));
 
-            countryDAO.update(c);
+            countryBusiness.update(c);
             JOptionPane.showMessageDialog(this, "Country successfully updated!");
             this.cleanPanelData();
-            this.table.setModel(new CountryTableModel(countryDAO.read()));
+            this.table.setModel(new CountryTableModel(countryBusiness.read()));
             
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
@@ -141,15 +143,15 @@ public class CountryWindow extends JFrame {
             countryDAO.delete(new Long (id.getText()));
             JOptionPane.showMessageDialog(this, "Country successfully deleted!");
             this.cleanPanelData();
-            this.table.setModel(new CountryTableModel(countryDAO.read()));
+            this.table.setModel(new CountryTableModel(countryBusiness.read()));
             
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }
 
-    public CountryWindow(CountryDAO countryDAO) {
-        this.countryDAO = countryDAO;
+    public CountryWindow(CountryBusiness countryBusiness) {
+        this.countryBusiness = countryBusiness;
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         contentPane = new JPanel();
@@ -161,7 +163,7 @@ public class CountryWindow extends JFrame {
         contentPane.add(panelTable, BorderLayout.CENTER);
 
         table = new JTable();
-        table.setModel(new CountryTableModel(countryDAO.read()));
+        table.setModel(new CountryTableModel(countryBusiness.read()));
         panelTable.setViewportView(table);
         table.getSelectionModel().addListSelectionListener(e -> this.updatePanelData());
 

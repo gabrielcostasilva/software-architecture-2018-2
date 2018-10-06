@@ -17,9 +17,6 @@ public class CustomerDAO {
 
     public boolean create(Customer customer) throws Exception {
 
-        if (this.read().stream().map(Customer::getName).anyMatch(e -> e.equals(customer.getName()))) {
-            throw new IllegalArgumentException("There already is a customer with this name!");
-        } else {
             try (Connection conn = DriverManager.getConnection(URL)) {
 
                 PreparedStatement statement = conn.prepareStatement("INSERT INTO Customer (name, phone, age, creditLimit, countryId) VALUES (?, ?, ?, ?, ?)");
@@ -36,8 +33,6 @@ public class CustomerDAO {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
-
-        }
 
         return false;
     }
@@ -79,9 +74,6 @@ public class CustomerDAO {
 
     public boolean update(Customer customer) {
 
-        if (this.read().stream().map(Customer::getName).anyMatch(e -> e.equals(customer.getName()))) {
-            throw new IllegalArgumentException("There already is a customer with this name!");
-        } else {
             try (Connection conn = DriverManager.getConnection(URL)) {
 
                 PreparedStatement statement = conn.prepareStatement("UPDATE Customer SET name = ?, phone = ?, age = ?, creditLimit = ? , countryId = ? WHERE id = ?");
@@ -100,7 +92,6 @@ public class CustomerDAO {
                 ex.printStackTrace();
 
             }
-        }
 
         return false;
     }

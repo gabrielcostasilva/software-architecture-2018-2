@@ -1,7 +1,9 @@
 package edu.utfpr.cp.sa.gui;
 
 import edu.utfpr.cp.sa.dao.CountryDAO;
+import edu.utfpr.cp.sa.business.CountryBusiness;
 import edu.utfpr.cp.sa.dao.CustomerDAO;
+import edu.utfpr.cp.sa.business.CustomerBusiness;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -20,7 +22,8 @@ public class MainWindow extends JFrame {
     private JPanel contentPane;
     private CountryDAO countryDAO;
     private CustomerDAO customerDAO;
-
+    private CustomerBusiness customerBusiness;
+    private CountryBusiness countryBusiness;
     public static void main(String[] args) {
         // Create tables in the database
         try (Connection conn = DriverManager.getConnection("jdbc:derby:database;create=true")) {
@@ -47,8 +50,8 @@ public class MainWindow extends JFrame {
     }
 
     public MainWindow() {
-        this.countryDAO = new CountryDAO();
-        this.customerDAO = new CustomerDAO();
+        this.countryBusiness = new CountryBusiness();
+        this.customerBusiness = new CustomerBusiness();
 
         setTitle("Customer & Country Management");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -59,10 +62,10 @@ public class MainWindow extends JFrame {
 
         JButton btnCustomerManagement = new JButton("Customer Management");
         contentPane.add(btnCustomerManagement);
-        btnCustomerManagement.addActionListener(e -> new CustomerWindow(customerDAO, countryDAO));
+        btnCustomerManagement.addActionListener(e -> new CustomerWindow(customerBusiness, countryBusiness));
 
         JButton btnCountryManagement = new JButton("Country Management");
-        btnCountryManagement.addActionListener(e -> new CountryWindow(countryDAO));
+        btnCountryManagement.addActionListener(e -> new CountryWindow(countryBusiness));
         contentPane.add(btnCountryManagement);
 
         pack();
