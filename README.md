@@ -41,3 +41,16 @@ cd software-architecture-2018-2
 mvn package
 java -jar target/app2-1.0-SNAPSHOT.jar
 ```
+
+### App05
+This branch adds the business layer to the application. Note that no architectural description was updated in this branch.
+
+This is a maven project with Derby embedded DB. Thus you just need to clone, package and run, like this:
+
+```
+git clone -b App05 https://github.com/gabrielcostasilva/software-architecture-2018-2.git
+
+cd software-architecture-2018-2
+mvn package
+java -jar target/app2-1.0-SNAPSHOT.jar
+```
