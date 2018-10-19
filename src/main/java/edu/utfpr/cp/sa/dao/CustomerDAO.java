@@ -17,26 +17,22 @@ public class CustomerDAO {
 
     public boolean create(Customer customer) throws Exception {
 
-        if (this.read().stream().map(Customer::getName).anyMatch(e -> e.equals(customer.getName()))) {
-            throw new IllegalArgumentException("There already is a customer with this name!");
-        } else {
-            try (Connection conn = DriverManager.getConnection(URL)) {
+        try (Connection conn = DriverManager.getConnection(URL)) {
 
-                PreparedStatement statement = conn.prepareStatement("INSERT INTO Customer (name, phone, age, creditLimit, countryId) VALUES (?, ?, ?, ?, ?)");
-                statement.setString(1, customer.getName());
-                statement.setString(2, customer.getPhone());
-                statement.setInt(3, customer.getAge());
-                statement.setDouble(4, customer.getCreditLimit());
-                statement.setLong(5, customer.getCountry().getId());
+            PreparedStatement statement = conn.prepareStatement(
+                    "INSERT INTO Customer (name, phone, age, creditLimit, countryId) VALUES (?, ?, ?, ?, ?)");
+            statement.setString(1, customer.getName());
+            statement.setString(2, customer.getPhone());
+            statement.setInt(3, customer.getAge());
+            statement.setDouble(4, customer.getCreditLimit());
+            statement.setLong(5, customer.getCountry().getId());
 
-                if (statement.executeUpdate() > 0) {
-                    return true;
-                }
-
-            } catch (SQLException ex) {
-                ex.printStackTrace();
+            if (statement.executeUpdate() > 0) {
+                return true;
             }
 
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
 
         return false;
@@ -56,16 +52,11 @@ public class CustomerDAO {
 
             while (result.next()) {
                 Long countryId = result.getLong("countryId");
-                Country country = new CountryDAO().read().stream().filter(e -> countryId == e.getId()).findFirst().get();
+                Country country = new CountryDAO().read().stream().filter(e -> countryId == e.getId()).findFirst()
+                        .get();
 
-                currentCustomer = new Customer(
-                        result.getLong("id"),
-                        result.getString("name"),
-                        result.getString("phone"),
-                        result.getInt("age"),
-                        result.getDouble("creditLimit"),
-                        country
-                );
+                currentCustomer = new Customer(result.getLong("id"), result.getString("name"),
+                        result.getString("phone"), result.getInt("age"), result.getDouble("creditLimit"), country);
 
                 customers.add(currentCustomer);
             }
@@ -79,27 +70,24 @@ public class CustomerDAO {
 
     public boolean update(Customer customer) {
 
-        if (this.read().stream().map(Customer::getName).anyMatch(e -> e.equals(customer.getName()))) {
-            throw new IllegalArgumentException("There already is a customer with this name!");
-        } else {
-            try (Connection conn = DriverManager.getConnection(URL)) {
+        try (Connection conn = DriverManager.getConnection(URL)) {
 
-                PreparedStatement statement = conn.prepareStatement("UPDATE Customer SET name = ?, phone = ?, age = ?, creditLimit = ? , countryId = ? WHERE id = ?");
-                statement.setString(1, customer.getName());
-                statement.setString(2, customer.getPhone());
-                statement.setInt(3, customer.getAge());
-                statement.setDouble(4, customer.getCreditLimit());
-                statement.setLong(5, customer.getCountry().getId());
-                statement.setLong(6, customer.getId());
+            PreparedStatement statement = conn.prepareStatement(
+                    "UPDATE Customer SET name = ?, phone = ?, age = ?, creditLimit = ? , countryId = ? WHERE id = ?");
+            statement.setString(1, customer.getName());
+            statement.setString(2, customer.getPhone());
+            statement.setInt(3, customer.getAge());
+            statement.setDouble(4, customer.getCreditLimit());
+            statement.setLong(5, customer.getCountry().getId());
+            statement.setLong(6, customer.getId());
 
-                if (statement.executeUpdate() > 0) {
-                    return true;
-                }
-
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-
+            if (statement.executeUpdate() > 0) {
+                return true;
             }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+
         }
 
         return false;

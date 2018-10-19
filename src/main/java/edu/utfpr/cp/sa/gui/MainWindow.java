@@ -1,12 +1,13 @@
 package edu.utfpr.cp.sa.gui;
 
-import edu.utfpr.cp.sa.dao.CountryDAO;
-import edu.utfpr.cp.sa.dao.CustomerDAO;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import edu.utfpr.cp.sa.business.CountryBusiness;
+import edu.utfpr.cp.sa.business.CustomerBusiness;
 
 import java.awt.FlowLayout;
 import java.sql.Connection;
@@ -18,8 +19,9 @@ import javax.swing.JButton;
 public class MainWindow extends JFrame {
 
     private JPanel contentPane;
-    private CountryDAO countryDAO;
-    private CustomerDAO customerDAO;
+    
+    private CountryBusiness countryBusiness;
+    private CustomerBusiness customerBusiness;
 
     public static void main(String[] args) {
         // Create tables in the database
@@ -47,8 +49,8 @@ public class MainWindow extends JFrame {
     }
 
     public MainWindow() {
-        this.countryDAO = new CountryDAO();
-        this.customerDAO = new CustomerDAO();
+        this.customerBusiness = new CustomerBusiness();
+        this.countryBusiness = new CountryBusiness();
 
         setTitle("Customer & Country Management");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -59,10 +61,10 @@ public class MainWindow extends JFrame {
 
         JButton btnCustomerManagement = new JButton("Customer Management");
         contentPane.add(btnCustomerManagement);
-        btnCustomerManagement.addActionListener(e -> new CustomerWindow(customerDAO, countryDAO));
+        btnCustomerManagement.addActionListener(e -> new CustomerWindow(customerBusiness, countryBusiness));
 
         JButton btnCountryManagement = new JButton("Country Management");
-        btnCountryManagement.addActionListener(e -> new CountryWindow(countryDAO));
+        btnCountryManagement.addActionListener(e -> new CountryWindow(countryBusiness));
         contentPane.add(btnCountryManagement);
 
         pack();

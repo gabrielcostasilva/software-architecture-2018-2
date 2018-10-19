@@ -16,25 +16,20 @@ public class CountryDAO {
 
     public boolean create(Country country) throws Exception {
 
-        if (this.read().stream().map(Country::getName).anyMatch(e -> e.equals(country.getName()))) {
-            throw new IllegalArgumentException("There already is a country with this name!");
+        try (Connection conn = DriverManager.getConnection(URL)) {
 
-        } else {
+            PreparedStatement statement = conn
+                    .prepareStatement("INSERT INTO Country (name, acronym, phoneDigits) VALUES (?, ?, ?)");
+            statement.setString(1, country.getName());
+            statement.setString(2, country.getAcronym());
+            statement.setInt(3, country.getPhoneDigits());
 
-            try (Connection conn = DriverManager.getConnection(URL)) {
-
-                PreparedStatement statement = conn.prepareStatement("INSERT INTO Country (name, acronym, phoneDigits) VALUES (?, ?, ?)");
-                statement.setString(1, country.getName());
-                statement.setString(2, country.getAcronym());
-                statement.setInt(3, country.getPhoneDigits());
-
-                if (statement.executeUpdate() > 0) {
-                    return true;
-                }
-
-            } catch (SQLException ex) {
-                ex.printStackTrace();
+            if (statement.executeUpdate() > 0) {
+                return true;
             }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
 
         return false;
@@ -70,28 +65,23 @@ public class CountryDAO {
     }
 
     public boolean update(Country country) {
-        
-        if (this.read().stream().map(Country::getName).anyMatch(e -> e.equals(country.getName()))) {
-            throw new IllegalArgumentException("There already is a country with this name!");
 
-        } else {
-            
-            try (Connection conn = DriverManager.getConnection(URL)) {
+        try (Connection conn = DriverManager.getConnection(URL)) {
 
-                PreparedStatement statement = conn.prepareStatement("UPDATE Country SET name=?, acronym=?, phoneDigits=? WHERE id=?");
-                statement.setString(1, country.getName());
-                statement.setString(2, country.getAcronym());
-                statement.setInt(3, country.getPhoneDigits());
-                statement.setLong(4, country.getId());
-                
-                if (statement.executeUpdate() > 0) {
-                    return true;
-                }
+            PreparedStatement statement = conn
+                    .prepareStatement("UPDATE Country SET name=?, acronym=?, phoneDigits=? WHERE id=?");
+            statement.setString(1, country.getName());
+            statement.setString(2, country.getAcronym());
+            statement.setInt(3, country.getPhoneDigits());
+            statement.setLong(4, country.getId());
 
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-
+            if (statement.executeUpdate() > 0) {
+                return true;
             }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+
         }
 
         return false;
@@ -112,7 +102,7 @@ public class CountryDAO {
             ex.printStackTrace();
 
         }
-        
+
         return false;
     }
 

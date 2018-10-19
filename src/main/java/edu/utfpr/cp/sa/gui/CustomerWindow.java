@@ -1,7 +1,7 @@
 package edu.utfpr.cp.sa.gui;
 
-import edu.utfpr.cp.sa.dao.CountryDAO;
-import edu.utfpr.cp.sa.dao.CustomerDAO;
+import edu.utfpr.cp.sa.business.CountryBusiness;
+import edu.utfpr.cp.sa.business.CustomerBusiness;
 import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
@@ -89,8 +89,8 @@ public class CustomerWindow extends JFrame {
     private JComboBox<String> country;
     private JTable table;
 
-    private CustomerDAO customerDAO;
-    private CountryDAO countryDAO;
+    private CustomerBusiness customerBusiness;
+    private CountryBusiness countryBusiness;
 
     private void cleanPanelData() {
         id.setText("");
@@ -111,7 +111,7 @@ public class CustomerWindow extends JFrame {
 
     private void create() {
         Customer c = new Customer();
-        Country selected = countryDAO.read().stream().filter(e -> e.getName().equalsIgnoreCase((String) country.getSelectedItem())).findFirst().get();
+        Country selected = countryBusiness.read().stream().filter(e -> e.getName().equalsIgnoreCase((String) country.getSelectedItem())).findFirst().get();
 
         try {
             c.setCountry(selected);
@@ -143,10 +143,10 @@ public class CustomerWindow extends JFrame {
         }
 
         try {
-            customerDAO.create(c);
+            customerBusiness.create(c);
             JOptionPane.showMessageDialog(this, "Customer successfully added!");
             this.cleanPanelData();
-            this.table.setModel(new CustomerTableModel(customerDAO.read()));
+            this.table.setModel(new CustomerTableModel(customerBusiness.read()));
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
@@ -155,8 +155,8 @@ public class CustomerWindow extends JFrame {
     }
 
     private void update() {
-        Customer c = customerDAO.read().stream().filter(e -> e.getId().equals(new Long(id.getText()))).findAny().get();
-        Country selected = countryDAO.read().stream().filter(e -> e.getName().equalsIgnoreCase((String) country.getSelectedItem())).findFirst().get();
+        Customer c = customerBusiness.read().stream().filter(e -> e.getId().equals(new Long(id.getText()))).findAny().get();
+        Country selected = countryBusiness.read().stream().filter(e -> e.getName().equalsIgnoreCase((String) country.getSelectedItem())).findFirst().get();
 
         try {
             c.setCountry(selected);
@@ -188,10 +188,10 @@ public class CustomerWindow extends JFrame {
         }
 
         try {
-            customerDAO.update(c);
+            customerBusiness.update(c);
             JOptionPane.showMessageDialog(this, "Customer successfully updated!");
             this.cleanPanelData();
-            this.table.setModel(new CustomerTableModel(customerDAO.read()));
+            this.table.setModel(new CustomerTableModel(customerBusiness.read()));
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
@@ -202,22 +202,22 @@ public class CustomerWindow extends JFrame {
     private void delete() {
 
         try {
-            customerDAO.delete(new Long(id.getText()));
+            customerBusiness.delete(new Long(id.getText()));
             
             JOptionPane.showMessageDialog(this, "Customer successfully deleted!");
             
             this.cleanPanelData();
             
-            this.table.setModel(new CountryTableModel(countryDAO.read()));
+            this.table.setModel(new CustomerTableModel(customerBusiness.read()));
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }
 
-    public CustomerWindow(CustomerDAO customerDAO, CountryDAO countryDAO) {
-        this.customerDAO = customerDAO;
-        this.countryDAO = countryDAO;
+    public CustomerWindow(CustomerBusiness customerBusiness, CountryBusiness countryBusiness) {
+        this.customerBusiness = customerBusiness;
+        this.countryBusiness = countryBusiness;
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         contentPane = new JPanel();
@@ -229,7 +229,7 @@ public class CustomerWindow extends JFrame {
         contentPane.add(panelTable, BorderLayout.CENTER);
 
         table = new JTable();
-        table.setModel(new CustomerTableModel(customerDAO.read()));
+        table.setModel(new CustomerTableModel(customerBusiness.read()));
         panelTable.setViewportView(table);
         table.getSelectionModel().addListSelectionListener(e -> this.updatePanelData());
 
@@ -269,7 +269,7 @@ public class CustomerWindow extends JFrame {
         JLabel lblCountry = new JLabel("Country");
         panelInclusion.add(lblCountry);
 
-        country = new JComboBox<>(countryDAO.read().stream().map(Country::getName).toArray(String[]::new));
+        country = new JComboBox<>(countryBusiness.read().stream().map(Country::getName).toArray(String[]::new));
         panelInclusion.add(country);
 
         JButton btnCreate = new JButton("Create");

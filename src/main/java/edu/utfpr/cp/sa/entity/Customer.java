@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class Customer {
 	
-        private Long id;
+    private Long id;
 	private String name;
 	private String phone;
 	private int age;
@@ -35,24 +35,11 @@ public class Customer {
 		
 		if (this.getCountry() == null)
 			throw new Exception("Country must be defined!");
-		
-		if (phone.length() != this.getCountry().getPhoneDigits())
-			throw new Exception("Phone does not conform to country!");
-		
+				
 		this.phone = phone;
 	}
 
-	public void setAge(int age) {
-		
-		if (age <= 18)
-			this.setCreditLimit(this.getCreditLimit() + 100.0);
-		
-		else if (age <= 35)
-			this.setCreditLimit(this.getCreditLimit() + 300.0);
-		
-		else
-			this.setCreditLimit(this.getCreditLimit() + 500.0);
-			
+	public void setAge(int age) {			
 		this.age = age;
 	}
 
@@ -60,10 +47,7 @@ public class Customer {
 		
 		if (country == null || country.getName().length() < 1)
 			throw new Exception("Country must be informed!");
-		
-		if (country.getName().equalsIgnoreCase("Brazil"))
-			this.setCreditLimit(this.getCreditLimit() + 100.0);
-			
+					
 		this.country = country;
 	}
 
