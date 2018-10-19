@@ -1,10 +1,18 @@
 package edu.utfpr.cp.sa.entity;
 
+import java.io.Serializable;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 import lombok.Data;
 
 @Data
-public class Country {
+@Entity
+public class Country implements Serializable {
 	
+	@Id @GeneratedValue
         private Long id;
 	private String name;
 	private String acronym;

@@ -1,11 +1,22 @@
 package edu.utfpr.cp.sa.business;
 
-import java.util.Set;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import edu.utfpr.cp.sa.dao.CustomerDAO;
 import edu.utfpr.cp.sa.entity.Customer;
 
+@Component
 public class CustomerBusiness {
+
+    private CustomerDAO customerDAO;
+
+    @Autowired
+    public CustomerBusiness (CustomerDAO customerDAO) {
+        this.customerDAO = customerDAO;
+    }
 
     private boolean validatePhone(Customer customer) throws Exception {
 
@@ -49,13 +60,14 @@ public class CustomerBusiness {
             this.setCreditLimitByAge(customer);
             this.setCreditLimitByCountry(customer);
 
-            return new CustomerDAO().create(customer);
+            customerDAO.save(customer);
+            return true;
         }
 
     }
 
-    public Set<Customer> read() {
-        return new CustomerDAO().read();
+    public List<Customer> read() {
+        return customerDAO.findAll();
     }
 
     public boolean update(Customer customer) throws Exception {
@@ -73,13 +85,17 @@ public class CustomerBusiness {
             this.setCreditLimitByAge(customer);
             this.setCreditLimitByCountry(customer);
 
-            return new CustomerDAO().update(customer);
+            customerDAO.saveAndFlush(customer);
+            return true;
         }
 
     }
 
     public boolean delete(Long id) {
-        return new CustomerDAO().delete(id);
+        Customer c = this.read().stream().filter(e -> e.getId() == id).findAny().get();
+
+        customerDAO.delete(c);
+        return true;
     }
 
 }

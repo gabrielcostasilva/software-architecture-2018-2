@@ -54,3 +54,17 @@ cd software-architecture-2018-2
 mvn package
 java -jar target/app2-1.0-SNAPSHOT.jar
 ```
+
+### App06
+This branch takes the app to the web. This means a client-server architecture.
+
+We used Spring boot and JPA in this project.
+
+Thus you just need to clone and run, like this:
+
+```
+git clone -b App06 https://github.com/gabrielcostasilva/software-architecture-2018-2.git
+
+cd software-architecture-2018-2
+mvn clean spring-boot:run
+```

@@ -1,16 +1,26 @@
  package edu.utfpr.cp.sa.entity;
 
+import java.io.Serializable;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
 import lombok.Data;
 
 @Data
-public class Customer {
+@Entity
+public class Customer implements Serializable {
 	
+	@Id @GeneratedValue
     private Long id;
 	private String name;
 	private String phone;
 	private int age;
 	private double creditLimit;
 	
+	@ManyToOne
 	private Country country;
         
         public Customer () {}
