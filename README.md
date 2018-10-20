@@ -73,7 +73,7 @@ mvn clean spring-boot:run
 ### App07
 This branch features a REST API example by using Spring boot.
 
-To it in action, first clone and run the project:
+To see it in action, first clone and run the project:
 
 ```
 git clone -b App07 https://github.com/gabrielcostasilva/software-architecture-2018-2.git
