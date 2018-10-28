@@ -1,16 +1,26 @@
  package edu.utfpr.cp.sa.entity;
 
+import java.io.Serializable;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
 import lombok.Data;
 
 @Data
-public class Customer {
+@Entity
+public class Customer implements Serializable {
 	
-        private Long id;
+	@Id @GeneratedValue
+    private Long id;
 	private String name;
 	private String phone;
 	private int age;
 	private double creditLimit;
 	
+	@ManyToOne
 	private Country country;
         
         public Customer () {}
@@ -35,14 +45,11 @@ public class Customer {
 		
 		if (this.getCountry() == null)
 			throw new Exception("Country must be defined!");
-		
-		if (phone.length() != this.getCountry().getPhoneDigits())
-			throw new Exception("Phone does not conform to country!");
-		
+				
 		this.phone = phone;
 	}
 
-	public void setAge(int age) {	
+	public void setAge(int age) {			
 		this.age = age;
 	}
 
@@ -50,7 +57,7 @@ public class Customer {
 		
 		if (country == null || country.getName().length() < 1)
 			throw new Exception("Country must be informed!");
-			
+					
 		this.country = country;
 	}
 
