@@ -55,6 +55,7 @@
                         <th>Name</th>
                         <th>Acronym</th>
                         <th>Phone Digits</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -64,6 +65,7 @@
                         <td>${country.name}</td>
                         <td>${country.acronym}</td>
                         <td>${country.phoneDigits}</td>
+                        <td><a href="/country/delete?id=${country.id}">Delete</a></td>
                     </tr>
                 </#list>    
                 </tbody>
