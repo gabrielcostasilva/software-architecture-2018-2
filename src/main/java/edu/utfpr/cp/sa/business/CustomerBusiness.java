@@ -92,7 +92,7 @@ public class CustomerBusiness {
     }
 
     public boolean delete(Long id) {
-        Customer c = this.read().stream().filter(e -> e.getId() == id).findAny().get();
+        Customer c = this.read().stream().filter(e -> e.getId().equals(id)).findAny().get();
 
         customerDAO.delete(c);
         return true;

@@ -46,7 +46,7 @@ public class CountryBusiness {
 
     public boolean delete(Long id) {
 
-        Country c = this.read().stream().filter(e -> e.getId() == id).findAny().get();
+        Country c = this.read().stream().filter(e -> e.getId().equals(id)).findAny().get();
 
         this.countryDAO.delete(c);
         return true;
