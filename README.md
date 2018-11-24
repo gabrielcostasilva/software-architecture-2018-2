@@ -66,11 +66,11 @@ Thus you just need to clone and run, like this:
 git clone -b App06 https://github.com/gabrielcostasilva/software-architecture-2018-2.git
 
 cd software-architecture-2018-2
-
 mvn clean spring-boot:run
 ```
 
 ### App07
+
 This branch features a REST API example by using Spring boot.
 
 To see it in action, first clone and run the project:
@@ -91,4 +91,44 @@ curl -X GET localhost:8080/hello
 curl -X POST localhost:8080/person -H "Content-type: application/json" -d '{"name": "John Connor", "age": 14}' localhost:8080/person
 
 curl -X PUT localhost:8080/person -H "Content-type: application/json" -d '{"name": "John Connor", "age": 14}' localhost:8080/person
+```
+
+### App08
+
+This branch extends App06 by enabling deleting a country.
+
+Like previous branches, you just need to clone and run, like this:
+
+```
+git clone -b App08 https://github.com/gabrielcostasilva/software-architecture-2018-2.git
+
+cd software-architecture-2018-2
+mvn clean spring-boot:run
+```
+
+### App09
+
+This branch features a REST Serverless function example by using Azure functions.
+
+Some configuration may be necessary to run it: https://docs.microsoft.com/en-us/azure/azure-functions/functions-create-first-java-maven
+
+To see it in action, first clone and run the project:
+
+```
+git clone -b App09 https://github.com/gabrielcostasilva/software-architecture-2018-2.git
+
+cd software-architecture-2018-2
+
+mvn clean package
+mvn azure-functions:run
+```
+
+Like in the REST API, use a REST client tool (curl, httpie, postman) to access the endpoints. Using curl, you can:
+
+```
+curl -X GET <URL>
+
+curl -X POST <URL> -H "Content-type: application/json" -d '{"name": "John Connor", "age": 14}' localhost:8080/person
+
+curl -X PUT <URL> -H "Content-type: application/json" -d '{"name": "John Connor", "age": 14}' localhost:8080/person
 ```
