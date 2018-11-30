@@ -128,7 +128,22 @@ Like in the REST API, use a REST client tool (curl, httpie, postman) to access t
 ```
 curl -X GET <URL>
 
-curl -X POST <URL> -H "Content-type: application/json" -d '{"name": "John Connor", "age": 14}' localhost:8080/person
+curl -X POST <URL> -H "Content-type: application/json" -d '{"name": "John Connor", "age": 14}' 
 
-curl -X PUT <URL> -H "Content-type: application/json" -d '{"name": "John Connor", "age": 14}' localhost:8080/person
+curl -X PUT <URL> -H "Content-type: application/json" -d '{"name": "John Connor", "age": 14}' 
+```
+
+### App10
+
+This branch features a REST Serverless function activity by using Azure functions.
+
+To see it in action, first clone and run the project:
+
+```
+git clone -b App10 https://github.com/gabrielcostasilva/software-architecture-2018-2.git
+
+cd software-architecture-2018-2
+
+mvn clean package
+mvn azure-functions:run
 ```
